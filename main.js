@@ -7,7 +7,7 @@ let stop = {
     title: "Axamer Lizum",
     user: "benmertens",
     lat: 47.193889,
-    lng: 11.302222,,
+    lng: 11.302222,
     zoom: 11,
 };
 
@@ -85,7 +85,7 @@ const STOPS = [
         zoom: 14,
     },
     {
-       title: "Azoren",
+        title: "Azoren",
         user: "pauly0602",
         nr: 10,
         lat: 37.77,
