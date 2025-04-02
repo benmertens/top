@@ -200,18 +200,51 @@ const STOPS = [
 
 
 
+//Karte initialisieren
+let map = L.map('map');
+
+// Hintergrundkarte definieren
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+
+// loop über Etappen
+for (let i=0; i<STOPS.length; i++) {
+
+    // Marker zeichnen
+    let marker = L.marker([STOPS[i].lat, STOPS[i].lng]).addTo(map);
+
+    //Popup definieren
+    marker.bindPopup(`
+        <h2> ${STOPS[i].title}</h2>
+        <ul>
+            <li> Geogr. Breite: ${STOPS[i].lat.toFixed(5)}°</li>
+            <li> Geogr. Länge: ${STOPS[i].lng.toFixed(5)}°</li>
+        </ul>
+    `);
+
+    //auf eigene Etappe blicken und Popup öffnen
+    if (STOPS[i].user == "benmertens") {
+        map.setView([STOPS[i].lat, STOPS[i].lng], STOPS[i].zoom);
+        marker.openPopup();
+    }
+
+    // Pulldownmenü befüllen
+    let option = document.createElement("option");
+    option.value = STOPS[i].user;
+    option.text = STOPS[i].title;
+    if (STOPS[i].user == "benmertens") {
+        option.selected = true;
+    }
+    document.querySelector("#pulldown select").appendChild(option);
+}
 
 
-
-
-
-
-
-
-var map = L.map('map').setView([47.193889, 11.302222], 11);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-        var marker = L.marker([47.193889, 11.302222]).addTo(map);
-        marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+// auf Änderungen beim Pulldown reagieren
+document.querySelector("#pulldown select").onchange = function(evt){
+    let url = `https://${evt.target.value}.github.io/top`;
+    //console.log(evt.target.value);
+    //console.log(url);
+    window.location = url;
+}
